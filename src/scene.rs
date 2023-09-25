@@ -1,8 +1,6 @@
 use bevy::prelude::*;
 
-use bevy_xpbd_3d::{
-    prelude::*,
-};
+use bevy_xpbd_3d::prelude::*;
 
 pub struct SceneLoader;
 

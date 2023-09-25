@@ -9,7 +9,7 @@ edition = "2021"
 bevy = { version = "0.11.2", features = ["dynamic_linking"] }
 bevy_fmod = { git = "https://github.com/Salzian/bevy_fmod.git", tag = "v0.3.0" }
 bevy_framepace = "0.13.3"
-bevy_xpbd_3d = { git = "https://github.com/Jondolf/bevy_xpbd.git", branch = "main" }
+bevy_xpbd_3d = { git = "https://github.com/Jondolf/bevy_xpbd.git", branch = "main", features = ["debug-plugin"] }
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
