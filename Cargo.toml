@@ -6,8 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bevy = { version = "0.11.2", features = ["dynamic_linking"] }
-bevy_fmod = { git = "https://github.com/Salzian/bevy_fmod.git", tag = "v0.3.0" }
+#bevy = { version = "0.11.2", features = ["dynamic_linking"] }
+bevy = { version = "0.11.2"}
+#bevy_fmod = { git = "https://github.com/Salzian/bevy_fmod.git", tag = "v0.3.0" }
+bevy_fmod = { path = "../bevy_fmod" }
 bevy_framepace = "0.13.3"
 bevy_rapier3d = { version = "0.22.0", features = ["parallel"] }
 bevy_mod_wanderlust = "0.4.0"
