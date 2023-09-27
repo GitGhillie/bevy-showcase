@@ -10,6 +10,8 @@ use bevy::window::CursorGrabMode;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
 
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
@@ -26,6 +28,7 @@ fn main() {
         .add_plugins(bevy_framepace::FramepacePlugin)
         .add_plugins(scene::SceneLoader)
         .add_plugins(player::PlayerPlugin)
+        .add_plugins(WorldInspectorPlugin::new())
         .add_plugins(FmodPlugin {
             audio_banks_paths: &[
                 "./assets/audio/demo_project/Build/Desktop/Master.bank",
