@@ -1,10 +1,11 @@
+mod graphics;
 mod player;
 mod scene;
 
 use bevy::prelude::*;
 
+use bevy::window::Cursor;
 use bevy::window::CursorGrabMode;
-use bevy::{prelude::*, window::Cursor};
 
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
