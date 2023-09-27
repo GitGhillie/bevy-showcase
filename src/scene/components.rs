@@ -3,6 +3,9 @@ use bevy::prelude::*;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
 
+use bevy_eventlistener::prelude::*;
+use bevy_mod_picking::prelude::*;
+
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
 pub(crate) struct AudioSourceMarker(String);
@@ -21,6 +24,13 @@ pub(crate) fn insert_audio_sources(
 
         commands
             .entity(ent)
+            // .insert((
+            //     PickableBundle::default(),
+            //     RaycastPickTarget::default(),
+            //     On::<Pointer<Over>>::run(|event: Listener<Pointer<Over>>| {
+            //         info!("Out {:?}", event.target);
+            //     }),
+            // ))
             .insert(AudioSource::new(event_description))
             .remove::<AudioSourceMarker>();
     }
