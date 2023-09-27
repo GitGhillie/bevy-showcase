@@ -19,16 +19,25 @@ impl Plugin for SceneLoader {
             .add_plugins(
                 DefaultPickingPlugins
                     .build()
-                    .disable::<DefaultHighlightingPlugin>(),
+                    .disable::<DefaultHighlightingPlugin>()
+                    .disable::<DebugPickingPlugin>(),
             )
             .add_state::<GameState>()
             .add_loading_state(
                 LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
             )
             .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
+            .add_event::<components::DoSomethingComplex>()
             .add_systems(OnEnter(GameState::Next), use_my_assets)
             .add_systems(Startup, setup)
-            .add_systems(Update, (components::insert_audio_sources, make_pickable));
+            .add_systems(
+                Update,
+                (
+                    components::insert_audio_sources,
+                    components::play_sound_on_click
+                        .run_if(on_event::<components::DoSomethingComplex>()),
+                ),
+            );
     }
 }
 
@@ -96,23 +105,6 @@ fn use_my_assets(mut commands: Commands, my_assets: Res<MyAssets>) {
             scene: my_assets.detail.clone_weak(),
             ..default()
         },
-        On::<Pointer<Over>>::run(|event: Listener<Pointer<Over>>| {
-            info!("Out {:?}", event.target);
-        }),
-        Name::from("Suzanne"),
+        Name::from("AAAA"),
     ));
-}
-
-/// Makes everything in the scene with a mesh pickable
-/// Todo: make more efficient by only adding these components to marked components
-/// However, need to go to the child entity with the mesh and add it there
-fn make_pickable(
-    mut commands: Commands,
-    meshes: Query<Entity, (With<Handle<Mesh>>, Without<RaycastPickTarget>)>,
-) {
-    for entity in meshes.iter() {
-        commands
-            .entity(entity)
-            .insert((PickableBundle::default(), RaycastPickTarget::default()));
-    }
 }

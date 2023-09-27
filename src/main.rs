@@ -16,6 +16,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
+                //present_mode: bevy::window::PresentMode::AutoNoVsync,
                 cursor: Cursor {
                     visible: false,
                     grab_mode: CursorGrabMode::Locked,
@@ -54,4 +55,14 @@ fn startup(mut commands: Commands, studio: Res<FmodStudio>) {
 
 fn play_music(mut audio_sources: Query<&AudioSource, With<MyMusicPlayer>>) {
     audio_sources.single_mut().play();
+}
+
+pub fn low_latency_window_plugin() -> bevy::window::WindowPlugin {
+    bevy::window::WindowPlugin {
+        primary_window: Some(bevy::window::Window {
+            present_mode: bevy::window::PresentMode::AutoNoVsync,
+            ..Default::default()
+        }),
+        ..Default::default()
+    }
 }
