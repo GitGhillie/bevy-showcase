@@ -16,7 +16,7 @@ impl Plugin for PlayerPlugin {
         app.add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
             .add_plugins(RapierDebugRenderPlugin::default())
             .add_plugins(WanderlustPlugin)
-            .insert_resource(controls::Sensitivity(1.0))
+            .insert_resource(controls::Sensitivity(0.5))
             .add_systems(Startup, setup)
             .add_systems(
                 Update,

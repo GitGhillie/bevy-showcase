@@ -34,7 +34,7 @@ fn main() {
             ],
         })
         .add_systems(Startup, startup)
-        .add_systems(PostStartup, play_music)
+        //.add_systems(PostStartup, play_music)
         .run();
 }
 

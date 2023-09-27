@@ -1,16 +1,35 @@
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
-
+use bevy_asset_loader::prelude::*;
 use bevy_rapier3d::prelude::*;
-
-pub struct SceneLoader;
 
 use crate::graphics;
 
+pub struct SceneLoader;
+
 impl Plugin for SceneLoader {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup);
+        app.add_state::<GameState>()
+            .add_loading_state(
+                LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
+            )
+            .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
+            .add_systems(OnEnter(GameState::Next), use_my_assets)
+            .add_systems(Startup, setup);
     }
+}
+
+#[derive(Clone, Eq, PartialEq, Debug, Hash, Default, States)]
+enum GameState {
+    #[default]
+    AssetLoading,
+    Next,
+}
+
+#[derive(AssetCollection, Resource)]
+struct MyAssets {
+    #[asset(path = "level.glb#Scene0")]
+    scene: Handle<Scene>,
 }
 
 pub(crate) fn setup(
@@ -56,5 +75,15 @@ pub(crate) fn setup(
             ..default()
         },
         NotShadowCaster,
+    ));
+}
+
+fn use_my_assets(mut commands: Commands, my_assets: Res<MyAssets>) {
+    commands.spawn((
+        SceneBundle {
+            scene: my_assets.scene.clone_weak(),
+            ..default()
+        },
+        AsyncSceneCollider::default(),
     ));
 }
