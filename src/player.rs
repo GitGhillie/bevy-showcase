@@ -16,7 +16,7 @@ use crate::graphics;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
-            .add_plugins(RapierDebugRenderPlugin::default())
+            //.add_plugins(RapierDebugRenderPlugin::default())
             .add_plugins(WanderlustPlugin)
             .insert_resource(controls::Sensitivity(0.5))
             .add_systems(Startup, setup)

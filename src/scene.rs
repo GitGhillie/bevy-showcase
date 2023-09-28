@@ -83,7 +83,7 @@ pub(crate) fn setup(
                 cull_mode: None,
                 ..default()
             }),
-            transform: Transform::from_scale(Vec3::splat(80.0)),
+            transform: Transform::from_scale(Vec3::splat(800.0)),
             ..default()
         },
         NotShadowCaster,
