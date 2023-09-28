@@ -1,5 +1,6 @@
 mod graphics;
 mod player;
+mod replace_colliders;
 mod scene;
 
 use bevy::prelude::*;
@@ -10,6 +11,7 @@ use bevy::window::CursorGrabMode;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
 
+use crate::replace_colliders::ReplaceColliderPlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 fn main() {
@@ -30,6 +32,7 @@ fn main() {
         .add_plugins(scene::SceneLoader)
         .add_plugins(player::PlayerPlugin)
         .add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(ReplaceColliderPlugin)
         .add_plugins(FmodPlugin {
             audio_banks_paths: &[
                 "./assets/audio/demo_project/Build/Desktop/Master.bank",

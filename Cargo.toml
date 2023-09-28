@@ -11,7 +11,7 @@ bevy = { version = "0.11.2"}
 #bevy_fmod = { git = "https://github.com/Salzian/bevy_fmod.git", tag = "v0.3.0" }
 bevy_fmod = { path = "../bevy_fmod" }
 bevy_framepace = "0.13.3"
-bevy_rapier3d = { version = "0.22.0", features = ["parallel"] }
+bevy_rapier3d = { version = "0.22.0", features = ["parallel", "serde-serialize"] }
 bevy_mod_wanderlust = "0.4.0"
 bevy_gltf_components = { git="https://github.com/kaosat-dev/Blender_bevy_components_worklflow.git" }
 bevy_asset_loader = "0.17.0"

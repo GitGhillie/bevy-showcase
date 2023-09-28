@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy::window::CursorGrabMode;
 use bevy::window::PrimaryWindow;
+use bevy_fmod::prelude::AudioListener;
 use bevy_mod_picking::prelude::RaycastPickCamera;
 use bevy_mod_wanderlust::{
     ControllerBundle, ControllerPhysicsBundle, ControllerSettings, WanderlustPlugin,
@@ -82,6 +83,8 @@ pub(crate) fn setup(
                         }),
                         ..default()
                     },
+                    AudioListener::default(),
+                    Velocity::default(),
                     graphics::get_fog_settings(),
                     RaycastPickCamera::default(),
                     controls::PlayerCam,

@@ -33,6 +33,7 @@ pub(crate) fn insert_audio_sources(
                 // }),
             ))
             .insert(AudioSource::new(event_description))
+            .insert(Velocity::default())
             .remove::<AudioSourceMarker>();
 
         // The goal here is to add PickableBundle and RaycastPickTarget to the entity with
@@ -57,7 +58,7 @@ impl From<ListenerInput<Pointer<Down>>> for DoSomethingComplex {
 
 pub(crate) fn play_sound_on_click(
     mut greetings: EventReader<DoSomethingComplex>,
-    parent_query: Query<(&Parent)>,
+    parent_query: Query<&Parent>,
     parent_components: Query<&AudioSource>,
 ) {
     for event in greetings.iter() {
