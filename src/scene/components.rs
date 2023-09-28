@@ -10,40 +10,29 @@ use bevy_mod_picking::prelude::*;
 #[reflect(Component)]
 pub(crate) struct AudioSourceMarker(String);
 
+#[derive(Component, Reflect, Default, Debug)]
+#[reflect(Component)]
+pub(crate) struct Train;
+
 pub(crate) fn register_types(app: &mut App) {
     app.register_type::<AudioSourceMarker>();
+    app.register_type::<Train>();
 }
 
+// Assuming that all audio sources are a child of a mesh (i.e. it's clickable)
 pub(crate) fn insert_audio_sources(
     mut commands: Commands,
-    query: Query<(Entity, &AudioSourceMarker, &Children)>,
+    query: Query<(Entity, &AudioSourceMarker)>,
     studio: Res<FmodStudio>,
 ) {
-    for (ent, audio_marker, children) in query.iter() {
+    for (ent, audio_marker) in query.iter() {
         let event_description = studio.0.get_event(&*audio_marker.0).unwrap();
 
         commands
             .entity(ent)
-            .insert((
-                PickableBundle::default(),
-                RaycastPickTarget::default(),
-                On::<Pointer<Down>>::send_event::<DoSomethingComplex>(),
-                // On::<Pointer<Over>>::run(|event: Listener<Pointer<Over>>| {
-                //     info!("Out {:?}", event.target);
-                // }),
-            ))
             .insert(AudioSource::new(event_description))
             .insert(Velocity::default())
             .remove::<AudioSourceMarker>();
-
-        // The goal here is to add PickableBundle and RaycastPickTarget to the entity with
-        // the mesh for mod_picking to work. But with bevy_mod_picking the components you add in
-        // Blender are one level higher in the hierarchy, hence this hack.
-        for &child in children {
-            commands
-                .entity(child)
-                .insert((PickableBundle::default(), RaycastPickTarget::default()));
-        }
     }
 }
 
@@ -66,5 +55,26 @@ pub(crate) fn play_sound_on_click(
         let parent = parent_query.get(event.0).unwrap().get();
         let source = parent_components.get(parent).unwrap();
         source.play();
+    }
+}
+
+pub(crate) fn play_sound_on_key(
+    audio_sources: Query<&AudioSource, With<Parent>>,
+    input: Res<Input<KeyCode>>,
+) {
+    if input.just_pressed(KeyCode::E) {
+        println!("pressed E");
+        for audio_source in audio_sources.iter() {
+            println!("playing sound");
+            audio_source.play();
+            audio_source
+                .event_instance
+                .set_parameter_by_name("RPM", 420.0, false)
+                .unwrap();
+            audio_source
+                .event_instance
+                .set_parameter_by_name("Load", 1.0, false)
+                .unwrap();
+        }
     }
 }

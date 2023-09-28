@@ -34,8 +34,7 @@ impl Plugin for SceneLoader {
                 Update,
                 (
                     components::insert_audio_sources,
-                    components::play_sound_on_click
-                        .run_if(on_event::<components::DoSomethingComplex>()),
+                    components::play_sound_on_key,
                 ),
             );
     }
