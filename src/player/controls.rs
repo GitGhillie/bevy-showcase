@@ -1,5 +1,7 @@
 use bevy::input::mouse::MouseMotion;
 use bevy::prelude::*;
+use bevy::window::CursorGrabMode;
+use bevy::window::PrimaryWindow;
 use bevy_mod_wanderlust::ControllerInput;
 
 use std::f32::consts::FRAC_2_PI;
@@ -75,4 +77,30 @@ pub(crate) fn mouse_look(
     body_tf.rotate(Quat::from_scaled_axis(
         rot * Vec3::Y * cumulative.x / 180.0 * sens,
     ));
+}
+
+pub(crate) fn toggle_cursor_lock(
+    input: Res<Input<KeyCode>>,
+    mut windows: Query<&mut Window, With<PrimaryWindow>>,
+) {
+    let mut window = windows.single_mut();
+    let x = window.width() / 2.;
+    let y = window.height() / 2.;
+
+    if window.cursor.grab_mode == CursorGrabMode::Locked {
+        window.set_cursor_position(Some(Vec2::new(x, y)));
+    }
+
+    if input.just_pressed(KeyCode::Escape) {
+        match window.cursor.grab_mode {
+            CursorGrabMode::Locked => {
+                window.cursor.grab_mode = CursorGrabMode::None;
+                window.cursor.visible = true;
+            }
+            _ => {
+                window.cursor.grab_mode = CursorGrabMode::Locked;
+                window.cursor.visible = false;
+            }
+        }
+    }
 }

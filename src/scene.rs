@@ -1,4 +1,4 @@
-mod components;
+mod audio;
 
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
@@ -13,7 +13,7 @@ pub struct SceneLoader;
 
 impl Plugin for SceneLoader {
     fn build(&self, app: &mut App) {
-        components::register_types(app);
+        audio::register_types(app);
 
         app.add_plugins(ComponentsFromGltfPlugin)
             .add_plugins(
@@ -27,15 +27,12 @@ impl Plugin for SceneLoader {
                 LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
             )
             .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
-            .add_event::<components::DoSomethingComplex>()
+            .add_event::<audio::DoSomethingComplex>()
             .add_systems(OnEnter(GameState::Next), use_my_assets)
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
-                (
-                    components::insert_audio_sources,
-                    components::play_sound_on_key,
-                ),
+                (audio::insert_audio_sources, audio::play_sound_on_key),
             );
     }
 }
