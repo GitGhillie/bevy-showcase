@@ -63,9 +63,7 @@ pub(crate) fn play_sound_on_key(
     input: Res<Input<KeyCode>>,
 ) {
     if input.just_pressed(KeyCode::E) {
-        println!("pressed E");
         for audio_source in audio_sources.iter() {
-            println!("playing sound");
             audio_source.play();
             audio_source
                 .event_instance

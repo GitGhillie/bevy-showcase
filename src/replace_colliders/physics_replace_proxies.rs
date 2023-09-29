@@ -72,7 +72,6 @@ pub fn physics_replace_proxies(
                 ;
             }
             Collider::Mesh => {
-                println!("proxy: mesh");
                 for (_, collider_mesh) in
                     Mesh::search_in_children(entity, &children, &meshes, &mesh_handles)
                 {

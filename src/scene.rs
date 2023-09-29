@@ -59,7 +59,10 @@ pub(crate) fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    mut physics_config: ResMut<RapierConfiguration>,
 ) {
+    physics_config.physics_pipeline_active = false;
+
     // Sun
     commands.spawn(DirectionalLightBundle {
         directional_light: DirectionalLight {
@@ -68,7 +71,7 @@ pub(crate) fn setup(
             ..default()
         },
         transform: Transform::from_xyz(0.0, 0.0, 0.0)
-            .looking_at(Vec3::new(-0.15, -0.35, 0.25), Vec3::Y),
+            .looking_at(Vec3::new(0.15, -0.35, -0.25), Vec3::Y),
         cascade_shadow_config: graphics::create_cascade_shadow_config(),
         ..default()
     });
@@ -90,7 +93,11 @@ pub(crate) fn setup(
     ));
 }
 
-fn use_my_assets(mut commands: Commands, my_assets: Res<MyAssets>) {
+fn use_my_assets(
+    mut commands: Commands,
+    my_assets: Res<MyAssets>,
+    mut physics_config: ResMut<RapierConfiguration>,
+) {
     commands.spawn((
         SceneBundle {
             scene: my_assets.scene.clone_weak(),
@@ -106,4 +113,6 @@ fn use_my_assets(mut commands: Commands, my_assets: Res<MyAssets>) {
         },
         Name::from("AAAA"),
     ));
+
+    physics_config.physics_pipeline_active = true;
 }
