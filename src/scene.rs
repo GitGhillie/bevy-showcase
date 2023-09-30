@@ -1,4 +1,5 @@
 mod audio;
+mod police_cars;
 
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
@@ -14,6 +15,7 @@ pub struct SceneLoader;
 impl Plugin for SceneLoader {
     fn build(&self, app: &mut App) {
         audio::register_types(app);
+        police_cars::register_types(app);
 
         app.add_plugins(ComponentsFromGltfPlugin)
             .add_plugins(
@@ -32,7 +34,12 @@ impl Plugin for SceneLoader {
             .add_systems(Startup, setup)
             .add_systems(
                 Update,
-                (audio::insert_audio_sources, audio::play_sound_on_key),
+                (
+                    police_cars::insert_audio_sources,
+                    police_cars::insert_audio_sources,
+                    audio::insert_audio_sources,
+                    audio::play_sound_on_key,
+                ),
             );
     }
 }

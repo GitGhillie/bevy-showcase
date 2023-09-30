@@ -17,7 +17,7 @@ pub(crate) fn get_fog_settings() -> FogSettings {
 pub(crate) fn create_cascade_shadow_config() -> CascadeShadowConfig {
     let cascade_shadow_config = CascadeShadowConfigBuilder {
         first_cascade_far_bound: 0.3,
-        maximum_distance: 30.0,
+        maximum_distance: 200.0,
         ..default()
     }
     .build();
