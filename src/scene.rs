@@ -36,7 +36,7 @@ impl Plugin for SceneLoader {
                 Update,
                 (
                     police_cars::insert_audio_sources,
-                    police_cars::insert_audio_sources,
+                    police_cars::play_sound_on_key,
                     audio::insert_audio_sources,
                     audio::play_sound_on_key,
                 ),
@@ -90,7 +90,7 @@ pub(crate) fn setup(
                 cull_mode: None,
                 ..default()
             }),
-            transform: Transform::from_scale(Vec3::splat(800.0)),
+            transform: Transform::from_scale(Vec3::splat(1600.0)),
             ..default()
         },
         NotShadowCaster,

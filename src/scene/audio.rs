@@ -8,31 +8,30 @@ use bevy_mod_picking::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
-pub(crate) struct AudioSourceMarker(String);
+pub(crate) struct TrainAudioMarker(String);
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
 pub(crate) struct Train;
 
 pub(crate) fn register_types(app: &mut App) {
-    app.register_type::<AudioSourceMarker>();
+    app.register_type::<TrainAudioMarker>();
     app.register_type::<Train>();
 }
 
 // Assuming that all audio sources are a child of a mesh (i.e. it's clickable)
 pub(crate) fn insert_audio_sources(
     mut commands: Commands,
-    query: Query<(Entity, &AudioSourceMarker)>,
+    query: Query<(Entity, &TrainAudioMarker), Without<AudioSource>>,
     studio: Res<FmodStudio>,
 ) {
     for (ent, audio_marker) in query.iter() {
         let event_description = studio.0.get_event(&*audio_marker.0).unwrap();
-
+        println!("Inserting audio source");
         commands
             .entity(ent)
             .insert(AudioSource::new(event_description))
-            .insert(Velocity::default())
-            .remove::<AudioSourceMarker>();
+            .insert(Velocity::default());
     }
 }
 
@@ -59,11 +58,13 @@ pub(crate) fn play_sound_on_click(
 }
 
 pub(crate) fn play_sound_on_key(
-    audio_sources: Query<&AudioSource, With<Parent>>,
+    audio_sources: Query<&AudioSource, With<TrainAudioMarker>>,
     input: Res<Input<KeyCode>>,
 ) {
     if input.just_pressed(KeyCode::E) {
+        println!("Just pressed");
         for audio_source in audio_sources.iter() {
+            println!("starting");
             audio_source.play();
             audio_source
                 .event_instance

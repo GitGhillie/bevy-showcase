@@ -12,7 +12,7 @@ pub(crate) fn register_types(app: &mut App) {
 
 pub(crate) fn insert_audio_sources(
     mut commands: Commands,
-    query: Query<Entity, With<PoliceMarker>>,
+    query: Query<Entity, (With<PoliceMarker>, Without<AudioSource>)>,
     studio: Res<FmodStudio>,
 ) {
     for ent in query.iter() {
@@ -21,17 +21,18 @@ pub(crate) fn insert_audio_sources(
         commands
             .entity(ent)
             .insert(AudioSource::new(event_description))
-            .insert(Velocity::default())
-            .remove::<PoliceMarker>();
+            .insert(Velocity::default());
     }
 }
 
 pub(crate) fn play_sound_on_key(
-    audio_sources: Query<&AudioSource, With<Parent>>,
+    audio_sources: Query<&AudioSource, With<PoliceMarker>>,
     input: Res<Input<KeyCode>>,
 ) {
     if input.just_pressed(KeyCode::F) {
+        println!("Just pressed");
         for audio_source in audio_sources.iter() {
+            println!("starting");
             audio_source.play();
             audio_source
                 .event_instance

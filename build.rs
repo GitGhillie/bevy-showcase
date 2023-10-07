@@ -1,25 +1,27 @@
+/// This build script is needed to run the examples on Linux.
+/// Feel free to copy this to your own Bevy project.
+///
+/// Be aware that on Linux you also need to set LD_LIBRARY_PATH to include the libraries.
+/// There are a few ways to do it:
+///
+/// If you are working with an IDE it's easiest to add this to the run configuration.
+/// For example, in Rust Rover you set `Environment variables` to `LD_LIBRARY_PATH=./fmod/api/core/lib/x86_64:./fmod/api/studio/lib/x86_64`.
+///
+/// You may also use a config.toml to set it through cargo: https://stackoverflow.com/a/66509742
+///
+/// If you are running your executable directly (no IDE, no cargo) see https://www.hpc.dtu.dk/?page_id=1180
+
 fn main() {
-    #[cfg(all(target_os = "linux", target_arch = "x86"))]
+    #[cfg(target_os = "linux")]
     {
-        println!("cargo:rustc-link-search=/usr/lib/i386-linux-gnu/fmod-api/");
-        println!("cargo:rustc-env=LD_LIBRARY_PATH=/usr/lib/i386-linux-gnu/fmod-api/");
-    }
-
-    #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
-    {
-        println!("cargo:rustc-link-search=/usr/lib/x86_64-linux-gnu/fmod-api/");
-        println!("cargo:rustc-env=LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu/fmod-api/");
-    }
-
-    #[cfg(all(target_os = "linux", target_arch = "arm"))]
-    {
-        println!("cargo:rustc-link-search=/usr/lib/arm-linux-gnueabihf/fmod-api/");
-        println!("cargo:rustc-env=LD_LIBRARY_PATH=/usr/lib/arm-linux-gnueabihf/fmod-api/");
-    }
-
-    #[cfg(all(target_os = "linux", target_arch = "aarch64"))]
-    {
-        println!("cargo:rustc-link-search=/usr/lib/aarch64-linux-gnu/fmod-api/");
-        println!("cargo:rustc-env=LD_LIBRARY_PATH=/usr/lib/aarch64-linux-gnu/fmod-api/");
+        let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+        let api_loc = [
+            format!("./fmod/api/core/lib/{target_arch}"),
+            format!("./fmod/api/studio/lib/{target_arch}"),
+        ];
+        for loc in api_loc {
+            println!("cargo:rustc-link-search={loc}");
+            println!("cargo:rustc-env=LD_RUN_PATH={loc}");
+        }
     }
 }
