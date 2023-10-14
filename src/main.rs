@@ -7,9 +7,7 @@ use bevy::prelude::*;
 
 use bevy::window::Cursor;
 use bevy::window::CursorGrabMode;
-
-use bevy_fmod::prelude::AudioSource;
-use bevy_fmod::prelude::*;
+use bevy_fmod::prelude::FmodPlugin;
 
 use crate::replace_colliders::ReplaceColliderPlugin;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -42,29 +40,7 @@ fn main() {
                 "./assets/audio/demo_project/Build/Desktop/Vehicles.bank",
             ],
         })
-        .add_systems(Startup, startup)
-        .add_systems(PostStartup, play_music)
         .run();
-}
-
-#[derive(Component)]
-struct MyMusicPlayer;
-
-fn startup(mut commands: Commands, studio: Res<FmodStudio>) {
-    let event_description = studio.0.get_event("event:/Ambience/City").unwrap();
-
-    commands
-        .spawn(MyMusicPlayer)
-        .insert(AudioSource::new(event_description));
-}
-
-fn play_music(mut audio_sources: Query<&AudioSource, With<MyMusicPlayer>>) {
-    let source = audio_sources.single_mut();
-    source.play();
-    source
-        .event_instance
-        .set_parameter_by_name("Traffic", 0.5, false)
-        .unwrap();
 }
 
 pub fn low_latency_window_plugin() -> bevy::window::WindowPlugin {

@@ -1,5 +1,7 @@
+mod ambient_sound;
 mod audio;
 mod police_cars;
+mod trains;
 
 use bevy::pbr::NotShadowCaster;
 use bevy::prelude::*;
@@ -14,9 +16,6 @@ pub struct SceneLoader;
 
 impl Plugin for SceneLoader {
     fn build(&self, app: &mut App) {
-        audio::register_types(app);
-        police_cars::register_types(app);
-
         app.add_plugins(ComponentsFromGltfPlugin)
             .add_plugins(
                 DefaultPickingPlugins
@@ -24,23 +23,19 @@ impl Plugin for SceneLoader {
                     .disable::<DefaultHighlightingPlugin>()
                     .disable::<DebugPickingPlugin>(),
             )
+            .add_plugins((
+                audio::InsertAudioPlugin,
+                ambient_sound::AmbientSoundPlugin,
+                police_cars::PoliceCarPlugin,
+                trains::TrainsPlugin,
+            ))
             .add_state::<GameState>()
             .add_loading_state(
                 LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
             )
             .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
-            .add_event::<audio::DoSomethingComplex>()
-            .add_systems(OnEnter(GameState::Next), use_my_assets)
-            .add_systems(Startup, setup)
-            .add_systems(
-                Update,
-                (
-                    police_cars::insert_audio_sources,
-                    police_cars::play_sound_on_key,
-                    audio::insert_audio_sources,
-                    audio::play_sound_on_key,
-                ),
-            );
+            .add_systems(OnEnter(GameState::Next), spawn_scene)
+            .add_systems(Startup, setup);
     }
 }
 
@@ -65,6 +60,7 @@ pub(crate) fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut physics_config: ResMut<RapierConfiguration>,
 ) {
+    // Disable physics while assets are loading
     physics_config.physics_pipeline_active = false;
 
     // Sun
@@ -97,7 +93,7 @@ pub(crate) fn setup(
     ));
 }
 
-fn use_my_assets(
+fn spawn_scene(
     mut commands: Commands,
     my_assets: Res<MyAssets>,
     mut physics_config: ResMut<RapierConfiguration>,
@@ -108,6 +104,7 @@ fn use_my_assets(
             ..default()
         },
         AsyncSceneCollider::default(),
+        Name::from("Blockout"),
     ));
 
     commands.spawn((
@@ -115,7 +112,7 @@ fn use_my_assets(
             scene: my_assets.detail.clone_weak(),
             ..default()
         },
-        Name::from("AAAA"),
+        Name::from("Detail"),
     ));
 
     physics_config.physics_pipeline_active = true;

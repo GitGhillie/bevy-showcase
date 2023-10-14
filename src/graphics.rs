@@ -16,8 +16,8 @@ pub(crate) fn get_fog_settings() -> FogSettings {
 
 pub(crate) fn create_cascade_shadow_config() -> CascadeShadowConfig {
     let cascade_shadow_config = CascadeShadowConfigBuilder {
-        first_cascade_far_bound: 0.3,
         maximum_distance: 200.0,
+        overlap_proportion: 0.7,
         ..default()
     }
     .build();
@@ -25,6 +25,7 @@ pub(crate) fn create_cascade_shadow_config() -> CascadeShadowConfig {
     cascade_shadow_config
 }
 
+// add SSAO
 // add hdr setting
 // add tone mapping
 // add anti aliasing methods

@@ -12,11 +12,16 @@ pub(crate) struct Engine {
     load: f32,
 }
 
-pub(crate) fn register_types(app: &mut App) {
-    app.register_type::<PoliceMarker>();
+pub struct PoliceCarPlugin;
+
+impl Plugin for PoliceCarPlugin {
+    fn build(&self, app: &mut App) {
+        app.register_type::<PoliceMarker>()
+            .add_systems(Update, (insert_audio_sources, play_sound_on_key));
+    }
 }
 
-pub(crate) fn insert_audio_sources(
+fn insert_audio_sources(
     mut commands: Commands,
     query: Query<Entity, (With<PoliceMarker>, Without<AudioSource>)>,
     studio: Res<FmodStudio>,
@@ -35,7 +40,7 @@ pub(crate) fn insert_audio_sources(
     }
 }
 
-pub(crate) fn play_sound_on_key(
+fn play_sound_on_key(
     mut audio_sources: Query<(&AudioSource, &mut Engine), With<PoliceMarker>>,
     input: Res<Input<KeyCode>>,
 ) {
