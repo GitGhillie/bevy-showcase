@@ -1,4 +1,5 @@
 mod ambient_sound;
+mod attract_force;
 mod audio;
 mod police_cars;
 mod trains;
@@ -28,6 +29,7 @@ impl Plugin for SceneLoader {
                 ambient_sound::AmbientSoundPlugin,
                 police_cars::PoliceCarPlugin,
                 trains::TrainsPlugin,
+                attract_force::AttractPlugin,
             ))
             .add_state::<GameState>()
             .add_loading_state(

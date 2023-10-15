@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
+use bevy_rapier3d::prelude::ExternalForce;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
@@ -17,16 +18,17 @@ pub struct PoliceCarPlugin;
 impl Plugin for PoliceCarPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<PoliceMarker>()
-            .add_systems(Update, (insert_audio_sources, play_sound_on_key));
+            .add_systems(Update, (setup, play_sound_on_key));
     }
 }
 
-fn insert_audio_sources(
+fn setup(
     mut commands: Commands,
     query: Query<Entity, (With<PoliceMarker>, Without<AudioSource>)>,
     studio: Res<FmodStudio>,
 ) {
     for ent in query.iter() {
+        // FMOD audio event
         let event_description = studio.0.get_event("event:/Vehicles/Car Engine").unwrap();
 
         commands
@@ -36,7 +38,8 @@ fn insert_audio_sources(
             .insert(Engine {
                 rpm: 3300.0,
                 load: 1.0,
-            });
+            })
+            .insert(ExternalForce::default());
     }
 }
 

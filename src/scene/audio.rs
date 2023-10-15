@@ -16,6 +16,7 @@ impl Plugin for InsertAudioPlugin {
     }
 }
 
+/// The audio source markers get added by bevy_gltf_components
 pub(crate) fn insert_audio_sources(
     mut commands: Commands,
     query: Query<(Entity, &AudioSourceMarker), Without<AudioSource>>,
