@@ -25,7 +25,6 @@ pub(crate) fn create_cascade_shadow_config() -> CascadeShadowConfig {
     cascade_shadow_config
 }
 
-// add SSAO
 // add hdr setting
 // add tone mapping
 // add anti aliasing methods

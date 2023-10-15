@@ -12,6 +12,7 @@ mod camera;
 mod controls;
 
 use crate::graphics;
+use crate::player::camera::CameraComponents;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
@@ -26,6 +27,7 @@ impl Plugin for PlayerPlugin {
                     controls::movement_input.before(bevy_mod_wanderlust::movement),
                     controls::mouse_look,
                     controls::toggle_cursor_lock,
+                    controls::toggle_ssao,
                 ),
             );
     }
@@ -69,13 +71,13 @@ pub(crate) fn setup(
         .with_children(|commands| {
             commands
                 .spawn((
-                    camera::create_camera_bundle(),
                     AudioListener::default(),
                     Velocity::default(),
                     graphics::get_fog_settings(),
                     RaycastPickCamera::default(),
                     controls::PlayerCam,
                 ))
+                .insert_camera_components()
                 .with_children(|commands| {
                     let mesh = meshes.add(shape::Cube { size: 0.5 }.into());
 

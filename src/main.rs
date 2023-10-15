@@ -3,6 +3,7 @@ mod player;
 mod replace_colliders;
 mod scene;
 
+use bevy::core_pipeline::experimental::taa::TemporalAntiAliasPlugin;
 use bevy::prelude::*;
 
 use bevy::window::Cursor;
@@ -27,6 +28,7 @@ fn main() {
             ..default()
         }))
         .add_plugins(bevy_framepace::FramepacePlugin)
+        .add_plugins(TemporalAntiAliasPlugin)
         .add_plugins(scene::SceneLoader)
         .add_plugins(player::PlayerPlugin)
         //.add_plugins(WorldInspectorPlugin::new())

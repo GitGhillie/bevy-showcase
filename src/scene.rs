@@ -17,27 +17,31 @@ pub struct SceneLoader;
 
 impl Plugin for SceneLoader {
     fn build(&self, app: &mut App) {
-        app.add_plugins(ComponentsFromGltfPlugin)
-            .add_plugins(
-                DefaultPickingPlugins
-                    .build()
-                    .disable::<DefaultHighlightingPlugin>()
-                    .disable::<DebugPickingPlugin>(),
-            )
-            .add_plugins((
-                audio::InsertAudioPlugin,
-                ambient_sound::AmbientSoundPlugin,
-                police_cars::PoliceCarPlugin,
-                trains::TrainsPlugin,
-                attract_force::AttractPlugin,
-            ))
-            .add_state::<GameState>()
-            .add_loading_state(
-                LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
-            )
-            .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
-            .add_systems(OnEnter(GameState::Next), spawn_scene)
-            .add_systems(Startup, setup);
+        app.insert_resource(AmbientLight {
+            brightness: 0.3,
+            ..default()
+        })
+        .add_plugins(ComponentsFromGltfPlugin)
+        .add_plugins(
+            DefaultPickingPlugins
+                .build()
+                .disable::<DefaultHighlightingPlugin>()
+                .disable::<DebugPickingPlugin>(),
+        )
+        .add_plugins((
+            audio::InsertAudioPlugin,
+            ambient_sound::AmbientSoundPlugin,
+            police_cars::PoliceCarPlugin,
+            trains::TrainsPlugin,
+            attract_force::AttractPlugin,
+        ))
+        .add_state::<GameState>()
+        .add_loading_state(
+            LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
+        )
+        .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
+        .add_systems(OnEnter(GameState::Next), spawn_scene)
+        .add_systems(Startup, setup);
     }
 }
 
