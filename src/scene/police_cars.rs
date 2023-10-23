@@ -48,7 +48,6 @@ fn setup(
                 |click, target_commands| {
                     if click.target != click.listener() && click.button == PointerButton::Primary {
                         target_commands.insert(AttractMarker);
-                        println!("Attract!");
                     }
                 },
             ));
