@@ -31,7 +31,7 @@ fn main() {
         .add_plugins(TemporalAntiAliasPlugin)
         .add_plugins(scene::SceneLoader)
         .add_plugins(player::PlayerPlugin)
-        //.add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(WorldInspectorPlugin::new())
         .add_plugins(ReplaceColliderPlugin)
         .add_plugins(FmodPlugin {
             audio_banks_paths: &[
