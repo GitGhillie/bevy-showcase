@@ -3,6 +3,7 @@ use crate::scene::{GameState, SceneAssets};
 use bevy::prelude::*;
 use bevy_mod_picking::prelude::*;
 use bevy_rapier3d::prelude::{Damping, ExternalForce};
+use random_branch::branch;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
@@ -25,9 +26,18 @@ fn spawn_prop(
     my_assets: Res<SceneAssets>,
 ) {
     if mouse_button_input.just_pressed(MouseButton::Right) {
+        let handle: Handle<Scene>;
+
+        // ooga booga
+        branch!(
+            handle = my_assets.tire.clone_weak(),
+            handle = my_assets.police_car.clone_weak(),
+            handle = my_assets.trashcan.clone_weak(),
+        );
+
         // todo: probably set the spawn location somewhere far away until the prop is ready
         commands.spawn(SceneBundle {
-            scene: my_assets.trashcan.clone_weak(),
+            scene: handle.clone_weak(),
             ..default()
         });
     }
