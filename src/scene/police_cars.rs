@@ -29,7 +29,6 @@ impl Plugin for PoliceCarPlugin {
 fn setup(
     mut commands: Commands,
     query: Query<(Entity, &Children), (With<PoliceMarker>, Without<AudioSource>)>,
-    //child_query: Query<>
     studio: Res<FmodStudio>,
 ) {
     for (ent, children) in query.iter() {

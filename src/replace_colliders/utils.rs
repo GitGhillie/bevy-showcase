@@ -1,6 +1,7 @@
+// Copied from Kaosat-dev on Github
 use bevy::prelude::*;
 use bevy::render::mesh::{MeshVertexAttributeId, PrimitiveTopology, VertexAttributeValues};
-// TAKEN VERBATIB FROM https://github.com/janhohenheim/foxtrot/blob/src/util/trait_extension.rs
+// TAKEN VERBATIM FROM https://github.com/janhohenheim/foxtrot/blob/src/util/trait_extension.rs
 
 pub(crate) trait Vec3Ext: Copy {
     fn is_approx_zero(self) -> bool;

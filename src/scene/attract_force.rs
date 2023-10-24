@@ -23,7 +23,7 @@ fn attract(
     let cam_transform = cam_transform.get_single().ok().unwrap();
 
     for (mut ext_force, global_transform, mut damping) in ext_forces.iter_mut() {
-        let attraction_point = cam_transform.translation() + (cam_transform.forward() * 5.0);
+        let attraction_point = cam_transform.translation() + (cam_transform.forward() * 3.0);
         let source = global_transform.translation();
 
         let attraction_vector = attraction_point - source;
