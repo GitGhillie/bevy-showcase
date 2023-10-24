@@ -27,8 +27,10 @@ fn attract(
         let source = global_transform.translation();
 
         let attraction_vector = attraction_point - source;
-        let attraction_force: f32;
+
         let distance = attraction_vector.length();
+        let attraction_force: f32;
+
         if distance > 1.0 {
             attraction_force = 3000.0 / attraction_vector.length();
             damping.linear_damping = 0.0;

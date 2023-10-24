@@ -2,7 +2,6 @@ use crate::scene::audio::AudioSourceMarker;
 use bevy::prelude::*;
 
 use bevy_fmod::prelude::AudioSource;
-use bevy_fmod::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_fmod::prelude::AudioListener;
+use bevy_fmod::prelude::*;
 use bevy_mod_picking::prelude::RaycastPickCamera;
 use bevy_mod_wanderlust::{
     ControllerBundle, ControllerPhysicsBundle, ControllerSettings, WanderlustPlugin,
@@ -27,7 +27,6 @@ impl Plugin for PlayerPlugin {
                     controls::movement_input.before(bevy_mod_wanderlust::movement),
                     controls::mouse_look,
                     controls::toggle_cursor_lock,
-                    controls::toggle_ssao,
                 ),
             );
     }
@@ -71,8 +70,7 @@ pub(crate) fn setup(
         .with_children(|commands| {
             commands
                 .spawn((
-                    AudioListener::default(),
-                    Velocity::default(),
+                    SpatialListenerBundle::default(),
                     graphics::get_fog_settings(),
                     RaycastPickCamera::default(),
                     controls::PlayerCam,

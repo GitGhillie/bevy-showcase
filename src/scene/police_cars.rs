@@ -2,6 +2,7 @@ use crate::scene::attract_force::AttractMarker;
 use bevy::prelude::*;
 use bevy_eventlistener::prelude::*;
 use bevy_fmod::prelude::AudioSource;
+use bevy_fmod::prelude::SpatialAudioBundle;
 use bevy_fmod::prelude::*;
 use bevy_mod_picking::prelude::*;
 use bevy_rapier3d::prelude::{Damping, ExternalForce, RigidBody};
@@ -13,7 +14,7 @@ pub(crate) struct PoliceMarker;
 #[derive(Component, Default)]
 pub(crate) struct Engine {
     rpm: f32,
-    load: f32,
+    _load: f32,
 }
 
 pub struct PoliceCarPlugin;
@@ -37,11 +38,10 @@ fn setup(
 
         commands
             .entity(ent)
-            .insert(AudioSource::new(event_description))
-            .insert(Velocity::default())
+            .insert(SpatialAudioBundle::new(event_description))
             .insert(Engine {
                 rpm: 3300.0,
-                load: 1.0,
+                _load: 1.0,
             })
             .insert(ExternalForce::default())
             .insert(Damping::default())
@@ -84,7 +84,7 @@ fn play_sound_on_key(
     input: Res<Input<KeyCode>>,
 ) {
     if input.just_pressed(KeyCode::F) {
-        for (audio_source, engine) in audio_sources.iter() {
+        for (audio_source, _engine) in audio_sources.iter() {
             audio_source.play();
             audio_source
                 .event_instance

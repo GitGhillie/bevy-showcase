@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
 use bevy_fmod::prelude::AudioSource;
+use bevy_fmod::prelude::SpatialAudioBundle;
 use bevy_fmod::prelude::*;
 
 #[derive(Component, Reflect, Default, Debug)]
@@ -23,10 +24,9 @@ pub(crate) fn insert_audio_sources(
     studio: Res<FmodStudio>,
 ) {
     for (ent, audio_marker) in query.iter() {
-        let event_description = studio.0.get_event(&*audio_marker.0).unwrap();
+        let event_description = studio.0.get_event(&audio_marker.0).unwrap();
         commands
             .entity(ent)
-            .insert(AudioSource::new(event_description))
-            .insert(Velocity::default());
+            .insert(SpatialAudioBundle::new(event_description));
     }
 }

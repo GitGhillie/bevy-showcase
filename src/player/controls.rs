@@ -4,8 +4,6 @@ use bevy::window::CursorGrabMode;
 use bevy::window::PrimaryWindow;
 use bevy_mod_wanderlust::ControllerInput;
 
-use bevy::pbr::{ScreenSpaceAmbientOcclusionQualityLevel, ScreenSpaceAmbientOcclusionSettings};
-use bevy::render::camera::TemporalJitter;
 use std::f32::consts::FRAC_2_PI;
 
 #[derive(Component, Default, Reflect)]
@@ -103,53 +101,6 @@ pub(crate) fn toggle_cursor_lock(
                 window.cursor.grab_mode = CursorGrabMode::Locked;
                 window.cursor.visible = false;
             }
-        }
-    }
-}
-
-pub fn toggle_ssao(
-    camera: Query<
-        (
-            Entity,
-            Option<&ScreenSpaceAmbientOcclusionSettings>,
-            Option<&TemporalJitter>,
-        ),
-        With<Camera>,
-    >,
-    mut commands: Commands,
-    keycode: Res<Input<KeyCode>>,
-) {
-    let (camera_entity, ssao_settings, temporal_jitter) = camera.single();
-
-    let mut commands = commands.entity(camera_entity);
-    if keycode.just_pressed(KeyCode::Key1) {
-        commands.remove::<ScreenSpaceAmbientOcclusionSettings>();
-    }
-    if keycode.just_pressed(KeyCode::Key2) {
-        commands.insert(ScreenSpaceAmbientOcclusionSettings {
-            quality_level: ScreenSpaceAmbientOcclusionQualityLevel::Low,
-        });
-    }
-    if keycode.just_pressed(KeyCode::Key3) {
-        commands.insert(ScreenSpaceAmbientOcclusionSettings {
-            quality_level: ScreenSpaceAmbientOcclusionQualityLevel::Medium,
-        });
-    }
-    if keycode.just_pressed(KeyCode::Key4) {
-        commands.insert(ScreenSpaceAmbientOcclusionSettings {
-            quality_level: ScreenSpaceAmbientOcclusionQualityLevel::High,
-        });
-    }
-    if keycode.just_pressed(KeyCode::Key5) {
-        commands.insert(ScreenSpaceAmbientOcclusionSettings {
-            quality_level: ScreenSpaceAmbientOcclusionQualityLevel::Ultra,
-        });
-    }
-    if keycode.just_pressed(KeyCode::Space) {
-        if temporal_jitter.is_some() {
-            commands.remove::<TemporalJitter>();
-        } else {
-            commands.insert(TemporalJitter::default());
         }
     }
 }
