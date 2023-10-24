@@ -97,16 +97,6 @@ pub(crate) fn setup(
         },
         NotShadowCaster,
     ));
-
-    commands.spawn((
-        PbrBundle {
-            mesh: meshes.add(Mesh::from(shape::Cube { size: 1.0 })),
-            material: materials.add(Color::WHITE.into()),
-            ..Default::default()
-        },
-        PickableBundle::default(),
-        RaycastPickTarget::default(),
-    ));
 }
 
 fn spawn_scene(

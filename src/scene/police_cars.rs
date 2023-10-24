@@ -4,7 +4,7 @@ use bevy_eventlistener::prelude::*;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::*;
 use bevy_mod_picking::prelude::*;
-use bevy_rapier3d::prelude::{ExternalForce, RigidBody};
+use bevy_rapier3d::prelude::{Damping, ExternalForce, RigidBody};
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
@@ -44,6 +44,7 @@ fn setup(
                 load: 1.0,
             })
             .insert(ExternalForce::default())
+            .insert(Damping::default())
             .insert(On::<Pointer<Down>>::target_commands_mut(
                 |click, target_commands| {
                     if click.target != click.listener() && click.button == PointerButton::Primary {
