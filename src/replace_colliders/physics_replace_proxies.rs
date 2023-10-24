@@ -41,7 +41,7 @@ pub fn physics_replace_proxies(
     for proxy_collider in proxy_colliders.iter_mut() {
         let (entity, collider_proxy, name, mut visibility) = proxy_collider;
         // we hide the collider meshes: perhaps they should be removed altogether once processed ?
-        if name.ends_with("_collider") || name.ends_with("_sensor") {
+        if name.contains("_collider") || name.ends_with("_sensor") {
             *visibility = Visibility::Hidden;
         }
 
