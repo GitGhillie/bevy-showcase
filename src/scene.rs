@@ -2,6 +2,7 @@ mod ambient_sound;
 mod attract_force;
 mod audio;
 mod police_cars;
+mod spawn_objects;
 mod trains;
 
 use bevy::pbr::NotShadowCaster;
@@ -34,30 +35,36 @@ impl Plugin for SceneLoader {
             police_cars::PoliceCarPlugin,
             trains::TrainsPlugin,
             attract_force::AttractPlugin,
+            spawn_objects::SpawnObjectsPlugin,
         ))
         .add_state::<GameState>()
         .add_loading_state(
             LoadingState::new(GameState::AssetLoading).continue_to_state(GameState::Next),
         )
-        .add_collection_to_loading_state::<_, MyAssets>(GameState::AssetLoading)
+        .add_collection_to_loading_state::<_, SceneAssets>(GameState::AssetLoading)
         .add_systems(OnEnter(GameState::Next), spawn_scene)
         .add_systems(Startup, setup);
     }
 }
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash, Default, States)]
-enum GameState {
+pub enum GameState {
     #[default]
     AssetLoading,
     Next,
 }
 
 #[derive(AssetCollection, Resource)]
-struct MyAssets {
+pub struct SceneAssets {
     #[asset(path = "level.glb#Scene0")]
     scene: Handle<Scene>,
     #[asset(path = "detail.glb#Scene0")]
     detail: Handle<Scene>,
+    // Below are random objects for spawn_objects
+    #[asset(path = "objects/trashcan.glb#Scene0")]
+    trashcan: Handle<Scene>,
+    #[asset(path = "objects/police_car.glb#Scene0")]
+    police_car: Handle<Scene>,
 }
 
 pub(crate) fn setup(
@@ -101,7 +108,7 @@ pub(crate) fn setup(
 
 fn spawn_scene(
     mut commands: Commands,
-    my_assets: Res<MyAssets>,
+    my_assets: Res<SceneAssets>,
     mut physics_config: ResMut<RapierConfiguration>,
 ) {
     commands.spawn((

@@ -1,11 +1,7 @@
-use crate::scene::attract_force::AttractMarker;
 use bevy::prelude::*;
-use bevy_eventlistener::prelude::*;
 use bevy_fmod::prelude::AudioSource;
 use bevy_fmod::prelude::SpatialAudioBundle;
 use bevy_fmod::prelude::*;
-use bevy_mod_picking::prelude::*;
-use bevy_rapier3d::prelude::{Damping, ExternalForce, RigidBody};
 
 #[derive(Component, Reflect, Default, Debug)]
 #[reflect(Component)]
@@ -22,16 +18,16 @@ pub struct PoliceCarPlugin;
 impl Plugin for PoliceCarPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<PoliceMarker>()
-            .add_systems(Update, (setup, play_sound_on_key, propagate_attract_marker));
+            .add_systems(Update, (setup, play_sound_on_key));
     }
 }
 
 fn setup(
     mut commands: Commands,
-    query: Query<(Entity, &Children), (With<PoliceMarker>, Without<AudioSource>)>,
+    query: Query<Entity, (With<PoliceMarker>, Without<AudioSource>)>,
     studio: Res<FmodStudio>,
 ) {
-    for (ent, children) in query.iter() {
+    for ent in query.iter() {
         // FMOD audio event
         let event_description = studio.0.get_event("event:/Vehicles/Car Engine").unwrap();
 
@@ -41,40 +37,7 @@ fn setup(
             .insert(Engine {
                 rpm: 3300.0,
                 _load: 1.0,
-            })
-            .insert(ExternalForce::default())
-            .insert(Damping::default())
-            .insert(On::<Pointer<Down>>::target_commands_mut(
-                |click, target_commands| {
-                    if click.target != click.listener() && click.button == PointerButton::Primary {
-                        target_commands.insert(AttractMarker);
-                    }
-                },
-            ));
-
-        // Quick hack to make the car pickable, since the parent doesn't have a mesh.
-        // Would be more efficient to only add this to the collider mesh.
-        for child in children {
-            commands
-                .entity(*child)
-                .insert(PickableBundle::default())
-                .insert(RaycastPickTarget::default());
-        }
-    }
-}
-
-// Because the attract marker gets inserted on the child mesh that was clicked (bug?)
-// we have to propagate it up to the actual police car entity.
-fn propagate_attract_marker(
-    mut commands: Commands,
-    child_query: Query<(Entity, &Parent), With<AttractMarker>>,
-    parent_query: Query<Entity, (Without<AttractMarker>, With<RigidBody>)>,
-) {
-    for (child, childs_parent) in &child_query {
-        if let Ok(parent) = parent_query.get(childs_parent.get()) {
-            commands.entity(parent).insert(AttractMarker);
-            commands.entity(child).remove::<AttractMarker>();
-        }
+            });
     }
 }
 
