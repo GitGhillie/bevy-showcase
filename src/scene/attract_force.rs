@@ -36,7 +36,7 @@ fn attract(
             damping.linear_damping = 0.0;
             damping.angular_damping = 0.0;
         } else {
-            attraction_force = 3000.0;
+            attraction_force = 3000.0 * distance;
             damping.linear_damping = 60.0;
             damping.angular_damping = 1.0;
         }
