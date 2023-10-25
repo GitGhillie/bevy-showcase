@@ -50,7 +50,7 @@ fn play_sound_on_key(
             audio_source.play();
             audio_source
                 .event_instance
-                .set_parameter_by_name("RPM", 3300.0, false)
+                .set_parameter_by_name("RPM", 2500.0, false)
                 .unwrap();
             audio_source
                 .event_instance
