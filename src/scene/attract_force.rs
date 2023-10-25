@@ -20,7 +20,7 @@ fn attract(
         (Without<Camera>, With<AttractMarker>),
     >,
 ) {
-    let cam_transform = cam_transform.get_single().ok().unwrap();
+    let cam_transform = cam_transform.single();
 
     for (mut ext_force, global_transform, mut damping) in ext_forces.iter_mut() {
         let attraction_point = cam_transform.translation() + (cam_transform.forward() * 3.0);
