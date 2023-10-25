@@ -67,6 +67,8 @@ pub struct SceneAssets {
     police_car: Handle<Scene>,
     #[asset(path = "objects/tire.glb#Scene0")]
     tire: Handle<Scene>,
+    #[asset(path = "objects/pallet.glb#Scene0")]
+    pallet: Handle<Scene>,
 }
 
 pub(crate) fn setup(

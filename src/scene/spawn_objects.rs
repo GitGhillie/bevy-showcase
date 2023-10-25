@@ -52,6 +52,7 @@ fn spawn_prop(
             handle = my_assets.tire.clone_weak(),
             handle = my_assets.police_car.clone_weak(),
             handle = my_assets.trashcan.clone_weak(),
+            handle = my_assets.pallet.clone_weak(),
         );
 
         // Todo? Set the spawn location somewhere far away until the prop is ready
