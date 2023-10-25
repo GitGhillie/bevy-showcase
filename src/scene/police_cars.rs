@@ -18,7 +18,7 @@ pub struct PoliceCarPlugin;
 impl Plugin for PoliceCarPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<PoliceMarker>()
-            .add_systems(Update, (setup, play_sound_on_key));
+            .add_systems(PreUpdate, (setup, play_sound_on_key));
     }
 }
 

@@ -2,7 +2,7 @@ use crate::scene::attract_force::AttractMarker;
 use crate::scene::{GameState, SceneAssets};
 use bevy::prelude::*;
 use bevy_mod_picking::prelude::*;
-use bevy_rapier3d::prelude::{Damping, ExternalForce};
+use bevy_rapier3d::prelude::{Damping, ExternalForce, ExternalImpulse};
 use random_branch::branch;
 
 #[derive(Component, Reflect, Default, Debug)]
@@ -35,18 +35,28 @@ fn spawn_prop(
             handle = my_assets.trashcan.clone_weak(),
         );
 
-        // todo: probably set the spawn location somewhere far away until the prop is ready
+        // Todo? Set the spawn location somewhere far away until the prop is ready
         commands.spawn(SceneBundle {
             scene: handle.clone_weak(),
+            transform: Transform::from_xyz(0.0, 0.0, 0.0),
             ..default()
         });
     }
 }
 
-fn setup_prop(mut commands: Commands, prop_query: Query<(Entity, &Children), Added<Prop>>) {
+fn setup_prop(
+    mut commands: Commands,
+    prop_query: Query<(Entity, &Children), Added<Prop>>,
+    cam_transform: Query<&GlobalTransform, With<Camera>>,
+) {
+    let cam_transform = cam_transform.get_single().ok().unwrap();
+
     for (prop, children) in prop_query.iter() {
         commands
             .entity(prop)
+            .insert(Transform::from_translation(
+                cam_transform.translation() + (cam_transform.forward() * 3.0),
+            ))
             .insert(ExternalForce::default())
             .insert(Damping::default())
             .insert(On::<Pointer<Down>>::target_commands_mut(
